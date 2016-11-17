@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation=
+    	"http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+        
+	<bean id="shitxAspect" class="com.shitx.aop.schema.advice.ShitxAspect"/>
+	<bean id="aspectBiz" class="com.shitx.aop.schema.biz.AspectBiz"/>
+	<aop:config>
+		<!-- 基于配置的aop只支持单例模式，下面的before,after,around其实是advice[通知]，要和advisor区别 -->
+		<aop:aspect id="shitxAspectAop" ref="shitxAspect">
+			<aop:pointcut expression="execution(* com.shitx.aop.schema.biz.*Biz.*(..))" id="shitxPointcut"/>
+			<!-- 执行顺序为before,around[proceed前],afterthrow,around[proceed后]，afterreturn[没正常返回则不执行],after[finally]  -->
+			<aop:before method="before" pointcut-ref="shitxPointcut"/>
+			<aop:after-throwing method="afterThrowing" pointcut-ref="shitxPointcut"/>
+			<aop:after-returning method="afterReturning" pointcut-ref="shitxPointcut"/>
+			<aop:after method="after" pointcut-ref="shitxPointcut"/>
+			<!-- 环绕通知可以和事物结合使用，比如控制事物尝试次数，try失败则计数。成功返回，失败若干返回。 -->
+			<aop:around method="aroundBiz" pointcut-ref="shitxPointcut"/>
+			<aop:around method="aroundInit" pointcut="execution(* com.shitx.aop.schema.biz.AspectBiz.init(String,int))
+					and args(bizName,times)"/>
+			<!-- introduction -->		
+			<aop:declare-parents types-matching="com.shitx.aop.schema.biz.*(+)" 
+					implement-interface="com.shitx.aop.schema.biz.Fit"
+					default-impl="com.shitx.aop.schema.biz.FitImpl"/>
+		</aop:aspect>
+	</aop:config>
+ </beans>

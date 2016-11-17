@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd" 
+        default-autowire="constructor">
+        <!-- 此处配置了default-autowirebyname,在配置autowiringservice时，不用构造器或者set方式注入autowiringdao
+        因为它是根据bean名字自动注入到 autoWiringService中，其实内部采用的是set方式注入//
+        default-autowire还可以是 byType,此时service中的AutoWiringDAO成员名字和autoWiringDAO可以不一致，
+        AutoWiringDAO对应的id也可以不设置//
+        default-autowire还可以是constructor-->
+        <bean id="autoWiringService" class="com.shitx.autowiring.AutoWiringService"></bean>
+        <bean id="autoWiringService1" class="com.shitx.autowiring.AutoWiringService1"></bean>
+		<bean id="autoWiringDAO" class="com.shitx.autowiring.AutoWiringDAO"></bean>
+ </beans>

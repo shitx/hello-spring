@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd" 
+        default-init-method="defaultInit" default-destroy-method="defaultDestroy">
+        <!-- bean scope -->
+        <bean id="beanScope" class="com.shitx.bean.BeanScope" scope="prototype"></bean>
+        <!-- bean lifecycle 
+        	<bean id="lifeCycle" class="com.shitx.bean.LifeCycle" init-method="start" destroy-method="stop"></bean>
+ 			<bean id="lifeCycle1" class="com.shitx.bean.LifeCycle1"></bean>
+        -->
+
+ </beans>
