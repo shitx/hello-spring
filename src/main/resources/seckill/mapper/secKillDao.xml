@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shitx.seckill.dao.SecKillDao"> 
+	<update id="reduceNumber">
+  		<!-- 具体的sql语句 -->
+  		update 
+  			seckill
+  		set
+  			number = number - 1
+  		where seckill_id = #{secKillId}
+  		and start_time <![CDATA[ <= ]]> #{killTime}
+  		and end_time >= #{killTime}
+  		and number > 0
+  	</update>
+  	
+  	<select id="queryById" resultType="SecKill" parameterType="long">
+  		select 
+  			seckill_id as secKillId,
+  			name as name,
+  			number as number,
+  			start_time as startTime,
+  			end_time as endTime,
+  			create_time as createTime
+  		from seckill
+  		where 
+  			seckill_id = #{secKillId}
+  	</select>
+  	
+  	<select id="queryAll" resultType="SecKill">
+  		select 
+  			seckill_id as secKillId,
+  			name as name,
+  			number as number,
+  			start_time as startTime,
+  			end_time as endTime,
+  			create_time as createTime
+  		from seckill
+  		order by create_time desc
+  		limit #{offset},#{limit}
+  	</select>
+</mapper>

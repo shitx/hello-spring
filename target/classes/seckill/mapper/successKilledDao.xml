@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 和上面的Dao接口的类名字保持一致。注意这里的sql语句是直接在xml里配置，不是通过实现mybatis接口来写java代码 -->
+<!-- 为DAO接口方法配置sql语句，其实就是DAO的实现 -->
+<mapper namespace="com.shitx.seckill.dao.SuccessKilledDao">
+	<insert id="insertSuccessKilled">
+		insert ignore into success_killed(seckill_id,user_phone,state)
+		values(#{secKillId},#{userPhone},0)
+	</insert>
+
+	<select id="queryByIdWithSecKill" resultType="SuccessKilled">
+		select
+		sk.seckill_id,
+		sk.user_phone,
+		sk.create_time,
+		sk.state,
+		s.seckill_id as "secKill.secKilledId",
+		s.name as "secKill.name",
+		s.number as "secKill.number",
+		s.start_time as "secKill.startTime",
+		s.end_time as "secKill.endTime",
+		s.create_time as "secKill.createTime"
+		from success_killed sk
+		inner join seckill s on sk.seckill_id = s.seckill_id
+		where sk.seckill_id = #{secKillId}
+	</select>
+
+</mapper>
