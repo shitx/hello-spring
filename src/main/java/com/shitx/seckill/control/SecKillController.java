@@ -111,21 +111,22 @@ public class SecKillController {
 			return new SecKillResult<SecKillExecution>(true, secKillExecution);
 		} catch(SecKillCloseException e1){
 			SecKillExecution execution = new SecKillExecution(secKillId, SecKillStatEnum.END);
-			return new SecKillResult<SecKillExecution>(false, execution);
+			return new SecKillResult<SecKillExecution>(true, execution);
 		}catch (RepeatKillException e2) {
 			SecKillExecution execution = new SecKillExecution(secKillId, SecKillStatEnum.REPEAT_KILL);
-			return new SecKillResult<SecKillExecution>(false, execution);
+			return new SecKillResult<SecKillExecution>(true, execution);
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage(),e);
 //			return new SecKillResult<SecKillExecution>(false, e.getMessage());
 			SecKillExecution execution = new SecKillExecution(secKillId, SecKillStatEnum.INNER_ERROR);
-			return new SecKillResult<SecKillExecution>(false, execution);
+			return new SecKillResult<SecKillExecution>(true, execution);
 		}
 	}
 	
 	//获取服务器当前时间
 	@RequestMapping(value="/time/now",method=RequestMethod.GET)
+	@ResponseBody
 	public SecKillResult<Long> time() {
 		Date date = new Date();
 		return new SecKillResult<Long>(true, date.getTime());
