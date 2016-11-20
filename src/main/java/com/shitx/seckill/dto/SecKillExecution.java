@@ -13,7 +13,7 @@ import com.shitx.seckill.enums.SecKillStatEnum;
  *
  */
 public class SecKillExecution {
-	private long secKillId;
+	private Long secKillId;
 	
 	//秒杀执行结果状态
 	private int state;
@@ -39,7 +39,7 @@ public class SecKillExecution {
 	 * @param state
 	 * @param stateInfo
 	 */
-	public SecKillExecution(long secKillId, SecKillStatEnum statEnum) {
+	public SecKillExecution(Long secKillId, SecKillStatEnum statEnum) {
 		super();
 		this.secKillId = secKillId;
 		this.state = statEnum.getState();
@@ -52,7 +52,7 @@ public class SecKillExecution {
 	 * @param stateInfo
 	 * @param successKilled
 	 */
-	public SecKillExecution(long secKillId, SecKillStatEnum statEnum, SuccessKilled successKilled) {
+	public SecKillExecution(Long secKillId, SecKillStatEnum statEnum, SuccessKilled successKilled) {
 		super();
 		this.secKillId = secKillId;
 		this.state = statEnum.getState();
@@ -63,14 +63,14 @@ public class SecKillExecution {
 	/**
 	 * @return the secKillId
 	 */
-	public long getSecKillId() {
+	public Long getSecKillId() {
 		return secKillId;
 	}
 
 	/**
 	 * @param secKillId the secKillId to set
 	 */
-	public void setSecKillId(long secKillId) {
+	public void setSecKillId(Long secKillId) {
 		this.secKillId = secKillId;
 	}
 

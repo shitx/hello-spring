@@ -1,2 +1,6 @@
 eclipse.preferences.version=1
+encoding//WebContent/WEB-INF/jsp/common/head.jsp=UTF-8
+encoding//WebContent/WEB-INF/jsp/common/tag.jsp=UTF-8
+encoding//WebContent/WEB-INF/jsp/detail.jsp=UTF-8
+encoding//WebContent/WEB-INF/jsp/list.jsp=UTF-8
 encoding//src/main/resources/jsp/searcher.jsp=UTF-8

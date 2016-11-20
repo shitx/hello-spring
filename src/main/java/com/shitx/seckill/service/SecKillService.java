@@ -30,13 +30,13 @@ public interface SecKillService {
 	 * @param secKillId
 	 * @return
 	 */
-	SecKill getById(long secKillId);
+	SecKill getById(Long secKillId);
 	
 	/**
 	 * 秒杀开启输出秒杀接口地址，否则输出系统时间和秒杀时间
 	 * @param secKillId
 	 */
-	Exposer exportSecKillUrl(long secKillId);
+	Exposer exportSecKillUrl(Long secKillId);
 	
 	/**
 	 * 执行秒杀操作.返回结果应该是封装好的对象，对象里有状态信息，以及秒杀到的产品.
@@ -45,6 +45,6 @@ public interface SecKillService {
 	 * @param userPhone
 	 * @param md5
 	 */
-	SecKillExecution executeSecKill(long secKillId, long userPhone, String md5)
+	SecKillExecution executeSecKill(Long secKillId, Long userPhone, String md5)
 	throws SecKillException, SecKillCloseException, RepeatKillException;
 }

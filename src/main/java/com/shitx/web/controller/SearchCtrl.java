@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.shitx.utils.JsonTools;
 
@@ -29,9 +30,9 @@ public class SearchCtrl {
 	
 	@GetMapping("/greet")
 	public void search_keyword(Model model,HttpServletRequest request,HttpServletResponse response) throws IOException{
+		model.addAttribute("aaaaa", "bbbbbbb");
 		response.setCharacterEncoding("utf-8");
 		request.setCharacterEncoding("utf-8");
 		response.getWriter().write(JsonTools.toJson("hello spring石同享"));
 	}
-	
 }

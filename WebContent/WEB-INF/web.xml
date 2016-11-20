@@ -29,9 +29,13 @@
 	<servlet>
 		<servlet-name>appServlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 配置springmvc需要加载哪些配置文件【和JUNIT测试时要指定配置文件是一个道理】
+			spring-dao.xml spring-service.xml spring-web.xml
+			Mybatis -> spring -> springMVC[spring和springmvc无需整合了]
+		-->
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath:servlet-context.xml</param-value>
+			<param-value>classpath:seckill/spring/spring-*.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

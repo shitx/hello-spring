@@ -11,7 +11,7 @@ import java.util.Date;
  *
  */
 public class SecKill {
-	private long secKillId;
+	private Long secKillId;
 
 	private String name;
 	
@@ -46,7 +46,7 @@ public class SecKill {
 	/**
 	 * @return the secKillId
 	 */
-	public long getSecKillId() {
+	public Long getSecKillId() {
 		return secKillId;
 	}
 

@@ -14,9 +14,9 @@ public class SuccessKilled {
 	
 	private Date createTime;
 	
-	private long secKillId;
+	private Long secKillId;
 	
-	private long userPhone;
+	private Long userPhone;
 	
 	//多对1，因为已给secKill多条成功记录
 	private SecKill secKill;
@@ -44,28 +44,28 @@ public class SuccessKilled {
 	/**
 	 * @return the secKillId
 	 */
-	public long getSecKillId() {
+	public Long getSecKillId() {
 		return secKillId;
 	}
 
 	/**
 	 * @param secKillId the secKillId to set
 	 */
-	public void setSecKillId(long secKillId) {
+	public void setSecKillId(Long secKillId) {
 		this.secKillId = secKillId;
 	}
 
 	/**
 	 * @return the userPhone
 	 */
-	public long getUserPhone() {
+	public Long getUserPhone() {
 		return userPhone;
 	}
 
 	/**
 	 * @param userPhone the userPhone to set
 	 */
-	public void setUserPhone(long userPhone) {
+	public void setUserPhone(Long userPhone) {
 		this.userPhone = userPhone;
 	}
 

@@ -52,12 +52,12 @@ public class SecKillServiceImpl implements SecKillService {
 		return secKillDao.queryAll(0, 4);
 	}
 
-	public SecKill getById(long secKillId) {
+	public SecKill getById(Long secKillId) {
 		return secKillDao.queryById(secKillId);
 	}
 
 
-	public Exposer exportSecKillUrl(long secKillId) {
+	public Exposer exportSecKillUrl(Long secKillId) {
 		SecKill secKill = secKillDao.queryById(secKillId);
 		if(secKill == null){
 			//看出来封装返回数据的好处了，给使用者一个对象，人家根据对象去判断是否成功，而不是报个错
@@ -77,7 +77,7 @@ public class SecKillServiceImpl implements SecKillService {
 		//如果只带了ID,或者带了ID和错误的MD5,我们认为它是非法请求
 	}
 
-	private String getMD5(long secKillId){
+	private String getMD5(Long secKillId){
 		String base = secKillId + "/" + salt;
 		String md5 = DigestUtils.md5DigestAsHex(base.getBytes());
 		return md5;
@@ -90,7 +90,7 @@ public class SecKillServiceImpl implements SecKillService {
 	 *  2 保证事务方法的执行时间尽可能短，不要穿插其他的网络操作（比如操作缓存，http/RPC,如果一定要做这些网络操作，把这些操作放到新的方法中，不要开启事务）
 	 *  3 不是所有的方法都需要开启事务。一旦别人的规范不一定，那么导致不需要的地方也被动加了事务。如果是只读，或者只有一条需要修改，那么不要开启事务！
 	 */
-	public SecKillExecution executeSecKill(long secKillId, long userPhone, String md5)
+	public SecKillExecution executeSecKill(Long secKillId, Long userPhone, String md5)
 			throws SecKillException, SecKillCloseException, RepeatKillException {
 		//最重要的方法，执行秒杀
 		//判断用户输入的ID和MD5是否对应上

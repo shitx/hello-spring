@@ -15,7 +15,7 @@
   		and number > 0
   	</update>
   	
-  	<select id="queryById" resultType="SecKill" parameterType="long">
+  	<select id="queryById" resultType="SecKill" parameterType="Long">
   		select 
   			seckill_id as secKillId,
   			name as name,

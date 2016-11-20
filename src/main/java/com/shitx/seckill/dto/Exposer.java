@@ -15,15 +15,15 @@ public class Exposer {
 	//加密措施
 	private String md5;
 	
-	private long secKillId;
+	private Long secKillId;
 	
 	//系统当前时间(毫秒)
-	private long now;
+	private Long now;
 
 	//
-	private long start;
+	private Long start;
 	
-	private long end;
+	private Long end;
 	
 	
 	/* (non-Javadoc)
@@ -42,7 +42,7 @@ public class Exposer {
 	 * @param start
 	 * @param end
 	 */
-	public Exposer(boolean expose, long secKillId, long now, long start, long end) {
+	public Exposer(boolean expose, Long secKillId, Long now, Long start, Long end) {
 		super();
 		this.expose = expose;
 		this.secKillId = secKillId;
@@ -56,7 +56,7 @@ public class Exposer {
 	 * @param md5
 	 * @param secKillId
 	 */
-	public Exposer(boolean expose, String md5, long secKillId) {
+	public Exposer(boolean expose, String md5, Long secKillId) {
 		super();
 		this.expose = expose;
 		this.md5 = md5;
@@ -67,7 +67,7 @@ public class Exposer {
 	 * @param expose
 	 * @param secKillId
 	 */
-	public Exposer(boolean expose, long secKillId) {
+	public Exposer(boolean expose, Long secKillId) {
 		super();
 		this.expose = expose;
 		this.secKillId = secKillId;
@@ -79,7 +79,7 @@ public class Exposer {
 	 * @param start
 	 * @param end
 	 */
-	public Exposer(boolean expose, long now, long start, long end) {
+	public Exposer(boolean expose, Long now, Long start, Long end) {
 		super();
 		this.expose = expose;
 		this.now = now;
@@ -118,56 +118,56 @@ public class Exposer {
 	/**
 	 * @return the secKillId
 	 */
-	public long getSecKillId() {
+	public Long getSecKillId() {
 		return secKillId;
 	}
 
 	/**
 	 * @param secKillId the secKillId to set
 	 */
-	public void setSecKillId(long secKillId) {
+	public void setSecKillId(Long secKillId) {
 		this.secKillId = secKillId;
 	}
 
 	/**
 	 * @return the now
 	 */
-	public long getNow() {
+	public Long getNow() {
 		return now;
 	}
 
 	/**
 	 * @param now the now to set
 	 */
-	public void setNow(long now) {
+	public void setNow(Long now) {
 		this.now = now;
 	}
 
 	/**
 	 * @return the start
 	 */
-	public long getStart() {
+	public Long getStart() {
 		return start;
 	}
 
 	/**
 	 * @param start the start to set
 	 */
-	public void setStart(long start) {
+	public void setStart(Long start) {
 		this.start = start;
 	}
 
 	/**
 	 * @return the end
 	 */
-	public long getEnd() {
+	public Long getEnd() {
 		return end;
 	}
 
 	/**
 	 * @param end the end to set
 	 */
-	public void setEnd(long end) {
+	public void setEnd(Long end) {
 		this.end = end;
 	}
 }

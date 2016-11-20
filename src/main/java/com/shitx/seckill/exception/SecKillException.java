@@ -3,6 +3,7 @@
  */
 package com.shitx.seckill.exception;
 
+
 /**
  * 
  * 秒杀相关业务异常。类似所有业务的父异常。都可以抛出它
@@ -11,6 +12,7 @@ package com.shitx.seckill.exception;
  */
 public class SecKillException extends RuntimeException{
 
+	
 	/**
 	 * @param message
 	 * @param cause
