@@ -47,4 +47,13 @@ public interface SecKillService {
 	 */
 	SecKillExecution executeSecKill(Long secKillId, Long userPhone, String md5)
 	throws SecKillException, SecKillCloseException, RepeatKillException;
+	
+	/**
+	 * 存储过程方式控制事务
+	 * @param secKillId
+	 * @param userPhone
+	 * @param md5
+	 */
+	SecKillExecution executeSecKillProducedure(Long secKillId, Long userPhone, String md5);
+	
 }

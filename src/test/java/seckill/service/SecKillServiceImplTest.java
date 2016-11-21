@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.shitx.seckill.dto.Exposer;
+import com.shitx.seckill.dto.SecKillExecution;
 import com.shitx.seckill.service.SecKillService;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -51,19 +52,19 @@ public class SecKillServiceImplTest {
 //	}
 
 	//测试代码完整逻辑，注意可重复执行【】
-	@Test
-	public void testExportSecKillLogic() {
-		long id = 1001L;
-		Exposer exposer = secKillService.exportSecKillUrl(id);
-		if(exposer.isExpose()){
-			logger.info("yyyyyy={}",exposer.toString());
-			long userPhone = 15210837230L;
-			String md5= exposer.getMd5();
-		}else{
-			//秒杀未开启
-			logger.warn("exposer={}",exposer);
-		}
-	}
+//	@Test
+//	public void testExportSecKillLogic() {
+//		long id = 1001L;
+//		Exposer exposer = secKillService.exportSecKillUrl(id);
+//		if(exposer.isExpose()){
+//			logger.info("yyyyyy={}",exposer.toString());
+//			long userPhone = 15210837230L;
+//			String md5= exposer.getMd5();
+//		}else{
+//			//秒杀未开启
+//			logger.warn("exposer={}",exposer);
+//		}
+//	}
 
 
 //	@Test
@@ -81,4 +82,21 @@ public class SecKillServiceImplTest {
 //		}//其他的异常才抛给上一级
 //	}
 
+	//测试代码完整逻辑，注意可重复执行【】通过存储过程
+	@Test
+	public void testExportSecKillProcedure() {
+		long id = 1000L;
+		Exposer exposer = secKillService.exportSecKillUrl(id);
+		if(exposer.isExpose()){
+			logger.info("yyyyyy={}",exposer.toString());
+			long userPhone = 15210837230L;
+			String md5= exposer.getMd5();
+			SecKillExecution secKillExecution = secKillService.executeSecKillProducedure(id, userPhone, md5);
+			logger.info(secKillExecution.getStateInfo());
+		}else{
+			//秒杀未开启
+			logger.warn("exposer={}",exposer);
+		}
+	}
+	
 }

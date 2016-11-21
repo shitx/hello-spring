@@ -132,5 +132,30 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+		<!-- jedis操作 -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<!-- 序列化和反序列化 -->
+		<dependency>
+			<groupId>com.dyuproject.protostuff</groupId>
+			<artifactId>protostuff-core</artifactId>
+			<version>1.0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.dyuproject.protostuff</groupId>
+			<artifactId>protostuff-runtime</artifactId>
+			<version>1.0.8</version>
+		</dependency>
+		<!-- map utils -->
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.2</version>
+		</dependency>
 	</dependencies>
 </project>

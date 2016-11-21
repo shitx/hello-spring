@@ -4,8 +4,11 @@
 package com.shitx.seckill.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;  //日志以后统一用slf4j
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import com.shitx.seckill.service.SecKillService;
+import com.sun.org.apache.regexp.internal.RE;
 import com.shitx.seckill.dao.SecKillDao;
 import com.shitx.seckill.dao.SuccessKilledDao;
+import com.shitx.seckill.dao.cache.RedisDao;
 import com.shitx.seckill.dto.Exposer;
 import com.shitx.seckill.dto.SecKillExecution;
 import com.shitx.seckill.entity.SecKill;
@@ -37,6 +42,8 @@ import com.shitx.seckill.exception.SecKillException;
 public class SecKillServiceImpl implements SecKillService {
 	private Logger logger =  LoggerFactory.getLogger(this.getClass());
 			
+	@Autowired
+	private RedisDao redisDao;
 	
 	//自动注入依赖
 	@Autowired  //@Resource @Inject 【j2ee标准】
@@ -58,11 +65,24 @@ public class SecKillServiceImpl implements SecKillService {
 
 
 	public Exposer exportSecKillUrl(Long secKillId) {
-		SecKill secKill = secKillDao.queryById(secKillId);
+		/**
+		 * 秒杀接口暴露【存在很多用户同时访问restful服务器，tomcat服务器会不断去请求mysql，实际上我们可以把数据缓存在tomcat容器所在的机器】
+		 * 优化方式：缓存优化
+		 * 先从缓存获取，如果没有则读数据库
+		 */
+		//从缓存获取
+		SecKill secKill = redisDao.getSecKill(secKillId);
 		if(secKill == null){
-			//看出来封装返回数据的好处了，给使用者一个对象，人家根据对象去判断是否成功，而不是报个错
-			return new Exposer(false, secKillId);
+			//2访问数据库
+			secKill = secKillDao.queryById(secKillId);
+			if(secKill == null){
+				return new Exposer(false, secKillId);
+			}else{
+				//3放入缓存
+				redisDao.putSecKill(secKill);
+			}
 		}
+		
 		Date startTime = secKill.getStartTime();
 		Date endTime = secKill.getEndTime();
 		Date nowTime = new Date();
@@ -101,20 +121,25 @@ public class SecKillServiceImpl implements SecKillService {
 		Date nowTime = new Date();
 		
 		try {
-			//减去库存
-			int updateCount = secKillDao.reduceNumber(secKillId, nowTime);
-			if(updateCount <= 0){
-				//没有更新记录,秒杀结束【可能是库存结束，或者是时间结束】
-				throw new SecKillCloseException("seckill is closed");
+			//【优化1】调整顺序，先插入记录，然后再减库存，插入明细的失败可能性比较小，而且能阻挡一部分重复秒杀.
+			// 先减库存，后插入明细，整个过程都要获取库存的行锁！     如果先插入明细，则不需要获取行锁，只有再减库存要获取。  第一种方法行锁锁住时间是2（TLL + x *GC）,第二种为（TTL + x * GC）.
+			// 当然对单个秒杀事件而言，总的时间是 2(TTL +x * GC)。只不过是行锁时间长度不一样，导致并发量不同。  注意看到这里第二种行锁锁住时间至少也是（TTL + x * GC）,原因是因为行锁申请，事务控制在客户端（TOMCAT）
+			// 发起，如果把行锁申请和事务开启结束操作都以存储过程的形式在数据库端执行。则行锁加锁的时间几乎为0【mysql本身并发很快，主要瓶颈在网络延迟】。这是【优化2：深度优化】
+			// 其实就是插入明细可以并发执行。  而减库存则无法在行锁上并发。   注：行锁是在要执行和该行有关操作时获取，在事务提交时释放。因此要在合适的位置放置要得到行锁的代码，在事务种靠后比较好 
+			//记录购买行为
+			int insertCount = successKilledDao.insertSuccessKilled(secKillId, userPhone);
+			//唯一，如果重复插入，则回被忽略，返回0
+			if(insertCount <= 0){
+				throw new RepeatKillException("seckill repeated");
 			}else{
-				//记录购买行为
-				int insertCount = successKilledDao.insertSuccessKilled(secKillId, userPhone);
-				//唯一，如果重复插入，则回被忽略，返回0
-				if(insertCount <= 0){
-					throw new RepeatKillException("seckill repeated");
+				//减去库存，热点商品竞争
+				int updateCount = secKillDao.reduceNumber(secKillId, nowTime);
+				if(updateCount <= 0){ //rollback
+					//没有更新记录,秒杀结束【可能是库存结束，或者是时间结束】
+					throw new SecKillCloseException("seckill is closed");
 				}else{
-					//秒杀成功
-					SuccessKilled successKilled = successKilledDao.queryByIdWithSecKill(secKillId);
+					//秒杀成功  commit
+					SuccessKilled successKilled = successKilledDao.queryByIdWithSecKill(secKillId,userPhone);
 					return new SecKillExecution(secKillId, SecKillStatEnum.SUCCESS, successKilled);
 				}
 			}
@@ -127,6 +152,36 @@ public class SecKillServiceImpl implements SecKillService {
 			logger.error(e.getMessage(), e);
 			//所有的编译异常，转化为运行时异常
 			throw new SecKillException("seckill inner error:" + e.getMessage());
+		}
+	}
+
+	/**
+	 * 通过使用储存过程，而不是spring aop事务管理来控制事务，减少行级锁持有时间，提高并发能力
+	 */
+	@Override
+	public SecKillExecution executeSecKillProducedure(Long secKillId, Long userPhone, String md5) {
+		if(md5 == null || !md5.equals(getMD5(secKillId))){
+			return new SecKillExecution(secKillId, SecKillStatEnum.DATE_REWRITE);
+		}
+		Date killTime = new Date();
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("secKillId", secKillId);
+		map.put("phone", userPhone);
+		map.put("killTime", killTime);
+		map.put("result", null);
+		try {
+			secKillDao.killByProcedure(map);
+			//获取result 采用common-connections包
+			int result = MapUtils.getInteger(map, "result", -2);
+			if(result == 1){
+				SuccessKilled sk = successKilledDao.queryByIdWithSecKill(secKillId,userPhone);
+				return new SecKillExecution(secKillId, SecKillStatEnum.SUCCESS);
+			}else{
+				return new SecKillExecution(secKillId, SecKillStatEnum.stateOf(result));
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			return new SecKillExecution(secKillId, SecKillStatEnum.INNER_ERROR);
 		}
 	}
 }

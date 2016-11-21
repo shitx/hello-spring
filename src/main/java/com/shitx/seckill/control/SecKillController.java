@@ -107,7 +107,8 @@ public class SecKillController {
 		try {   //注意我们在controller中处理所有的异常！！！包括重复秒杀，
 			//秒杀结束，以及其他的内部错误。所以我们的result是要返回给resolver的对象，它要转为JSON的
 			//它有是否成功的标识，如果成功有数据【secKillExecution对象】，如果成功则有我们自定义的异常对象！
-			SecKillExecution secKillExecution = SecKillService.executeSecKill(secKillId, userPhone, md5);
+//			SecKillExecution secKillExecution = SecKillService.executeSecKill(secKillId, userPhone, md5);  //通过AOP
+			SecKillExecution secKillExecution = SecKillService.executeSecKillProducedure(secKillId, userPhone, md5); //通过存储过程
 			return new SecKillResult<SecKillExecution>(true, secKillExecution);
 		} catch(SecKillCloseException e1){
 			SecKillExecution execution = new SecKillExecution(secKillId, SecKillStatEnum.END);

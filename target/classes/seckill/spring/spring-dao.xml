@@ -16,7 +16,7 @@
         http://www.springframework.org/schema/jdbc
         http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 	<context:property-placeholder
-		location="classpath:seckill/spring/jdbc.properties" />
+		location="classpath:seckill/spring/jdbc.properties,classpath:seckill/spring/cache.properties" />
 	<!-- 配置KILL数据库连接池 -->
 	<bean id="dataSourceKill" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="${jdbc.driver}"></property>
@@ -43,5 +43,14 @@
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryKill"></property>
 		<!-- 扫描特定的DAO接口包,为每个接口创建一个bean实现作为实际数据库操作的bean并注入容器 -->
 		<property name="basePackage" value="com.shitx.seckill.dao"></property>
+	</bean>
+	
+	<!-- 配置JEDIS -->
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg name="host" value="${redis.host}"></constructor-arg>
+		<constructor-arg name="port" value="${redis.port}"></constructor-arg>
+	</bean>
+	<bean id="redisDao" class="com.shitx.seckill.dao.cache.RedisDao">
+		<constructor-arg index="0" ref="jedisPool"></constructor-arg>
 	</bean>
 </beans>

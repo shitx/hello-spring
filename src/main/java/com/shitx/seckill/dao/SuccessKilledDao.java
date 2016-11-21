@@ -26,5 +26,13 @@ public interface SuccessKilledDao {
 	 * @param secKillId
 	 * @return
 	 */
-	SuccessKilled queryByIdWithSecKill(long secKillId);
+//	SuccessKilled queryByIdWithSecKill(long secKillId);
+	
+	/**
+	 * 根据id查询SuccessKilled,userPhone并携带秒杀产品的实体  
+	 * @param secKillId
+	 * @param userPhone
+	 * @return
+	 */
+	SuccessKilled queryByIdWithSecKill(@Param("secKillId")long secKillId,  @Param("userPhone") long userPhone);
 }
