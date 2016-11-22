@@ -157,5 +157,11 @@
 			<artifactId>commons-collections</artifactId>
 			<version>3.2.2</version>
 		</dependency>
+		<!-- zero message queue 多线程通信之消息队列 -->
+		<dependency>
+			<groupId>org.zeromq</groupId>
+			<artifactId>jeromq</artifactId>
+			<version>0.3.5</version>
+		</dependency>
 	</dependencies>
 </project>
