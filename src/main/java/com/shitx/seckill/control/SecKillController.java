@@ -30,6 +30,9 @@ import com.shitx.seckill.exception.SecKillCloseException;
 import com.shitx.seckill.service.SecKillService;
 import com.sun.org.apache.bcel.internal.generic.FADD;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 /**
  * @author shitx
  *
@@ -45,7 +48,10 @@ public class SecKillController {
 	SecKillService SecKillService;
 	
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
-	public String details(@PathVariable("id") String id){
+	public String details(@PathVariable("id") String id, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		Object name = session.getAttribute("password");
+		session.setAttribute("password", "root");
 		logger.info("id="+id);   
 		return "xx";
 	}

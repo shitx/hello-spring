@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.Session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,5 +35,12 @@ public class SearchCtrl {
 		response.setCharacterEncoding("utf-8");
 		request.setCharacterEncoding("utf-8");
 		response.getWriter().write(JsonTools.toJson("hello spring石同享"));
+		Object mysessionid =  request.getSession().getAttribute("mysessionid");
+		request.getSession().setAttribute("mysessionid", "tttttttttttttttttt");
+		if (null == mysessionid){
+			request.getSession().setAttribute("mysessionid", "tttttttttttttttttt");
+		}else{
+			LOGGER.info("mysessionid="+(String)mysessionid);
+		}
 	}
 }

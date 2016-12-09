@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
  * 源代码网络路径: http://img.mukewang.com/down/545040d70001107900000000.zip
  */
 
+@ComponentScan
 @Component //[因为Aspect是无法被包扫描自动发现的，base-package,所以才需要此项，表示它是bean,Aspect才会生效]
 @Aspect //[声明是一个切面]
 public class shitxAspect {
